@@ -184,6 +184,18 @@ class Debugger(object):
 		self._run_command('target record-full', False, False)
 		print('start', self.file, self.function, self.line_no)
 
+	def get_variable_value(self, name):
+		command = 'print {0}'.format(name)
+		output = self._run_command(command, False, False)
+		value = between(output, '=', "\n").strip()
+		return value
+
+	def set_variable_value(self, name, value):
+		command = 'print {0}={1}'.format(name, value)
+		output = self._run_command(command, False, False)
+		value = between(output, '=', "\n").strip()
+		return value
+
 	def step_to_line(self, line):
 		command = 'next'
 
@@ -255,6 +267,13 @@ if __name__ == '__main__':
 	debugger = Debugger()
 	debugger.load('main')
 	debugger.start()
+
+	debugger.step_to_line(21)
+	value = debugger.get_variable_value('f')
+	print('f = {0}'.format(value))
+
+	value = debugger.set_variable_value('f', 5)
+	print('f = {0}'.format(value))
 
 	debugger.step_to_line(41)
 	debugger.step_in()

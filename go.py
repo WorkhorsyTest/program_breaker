@@ -4,8 +4,8 @@
 
 # Make sure we are in at least python 2.7
 import sys
-if sys.version_info < (2, 7):
-	print("Python 2.7 or greater is required. Exiting ...")
+if sys.version_info < (2, 7) or sys.version_info >= (2, 8):
+	print("Python 2.7 is required. Exiting ...")
 	exit(1)
 
 import os

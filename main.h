@@ -7,7 +7,8 @@ void blah() {
 	int c = a + b;
 	printf("c: %d\n", c);
 
-	char name[] = "example name";
-	printf("name: %s\n", name);
+	int name = 6;
+	name = 8;
+	printf("name: %d\n", name);
 }
 

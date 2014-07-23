@@ -181,7 +181,19 @@ class Debugger(object):
 		command = 'start'
 		output = self._run_command(command, True, True)
 		self.file = between(output, 'file', ',').strip()
+		self._run_command('target record-full', False, False)
 		print('start', self.file, self.function, self.line_no)
+
+	def step_to_line(self, line):
+		command = 'next'
+
+		if line < self.line_no:
+			print("bad line")
+			exit()
+
+		while self.line_no < line:
+			self._run_command(command, True, True)
+		print('step_to_line', self.file, self.function, self.line_no)
 
 	def step_over(self, steps=1):
 		command = 'next'
@@ -189,6 +201,13 @@ class Debugger(object):
 		for n in range(steps):
 			self._run_command(command, True, True)
 			print('step_over', self.file, self.function, self.line_no)
+
+	def step_back(self, steps=1):
+		command = 'reverse-next'
+
+		for n in range(steps):
+			self._run_command(command, True, True)
+			print('step_back', self.file, self.function, self.line_no)
 
 	def step_in(self):
 		command = 'step'
@@ -230,13 +249,14 @@ if __name__ == '__main__':
 	debugger.load('main')
 	debugger.start()
 
-	debugger.step_over(24)
+	debugger.step_to_line(41)
 	locs = debugger.locals()
 
 	debugger.step_in()
-	debugger.step_over(6)
-	locs = debugger.locals()
-	print('type: ' + locs['name']['type'])
-	print('value: "{0}"'.format(locs['name']['value']))
 
+	debugger.step_to_line(12)
+	print('value: "{0}"'.format(debugger.locals()['name']['value']))
+
+	debugger.step_back()
+	print('value: "{0}"'.format(debugger.locals()['name']['value']))
 

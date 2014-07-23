@@ -257,13 +257,13 @@ if __name__ == '__main__':
 	debugger.start()
 
 	debugger.step_to_line(41)
-	locs = debugger.locals()
-
 	debugger.step_in()
 
 	debugger.step_to_line(12)
-	print('value: "{0}"'.format(debugger.locals()['name']['value']))
+	name = debugger.locals()['name']
+	print('name: "{0}", {1}'.format(name['value'], name['type']))
 
 	debugger.step_back()
-	print('value: "{0}"'.format(debugger.locals()['name']['value']))
+	name = debugger.locals()['name']
+	print('name: "{0}", {1}'.format(name['value'], name['type']))
 

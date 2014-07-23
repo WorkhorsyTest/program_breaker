@@ -195,12 +195,12 @@ class Debugger(object):
 			self._run_command(command, True, True)
 		print('step_to_line', self.file, self.function, self.line_no)
 
-	def step_over(self, steps=1):
+	def step_forward(self, steps=1):
 		command = 'next'
 
 		for n in range(steps):
 			self._run_command(command, True, True)
-			print('step_over', self.file, self.function, self.line_no)
+			print('step_forward', self.file, self.function, self.line_no)
 
 	def step_back(self, steps=1):
 		command = 'reverse-next'

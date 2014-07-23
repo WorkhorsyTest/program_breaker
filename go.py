@@ -183,10 +183,12 @@ class Debugger(object):
 		self.file = between(output, 'file', ',').strip()
 		print('start', self.file, self.function, self.line_no)
 
-	def step_over(self):
+	def step_over(self, steps=1):
 		command = 'next'
-		self._run_command(command, True, True)
-		print('step_over', self.file, self.function, self.line_no)
+
+		for n in range(steps):
+			self._run_command(command, True, True)
+			print('step_over', self.file, self.function, self.line_no)
 
 	def step_in(self):
 		command = 'step'
@@ -215,8 +217,12 @@ class Debugger(object):
 		for name, attr in variables.items():
 			value = to_python_value(attr['type'], attr['value'])
 			attr['value'] = value
-			print(attr['value'], value)
 
+		'''
+		print('locals:')
+		for name, attr in variables.items():
+			print('    ' + name, attr['type'], attr['value'])
+		'''
 		return variables
 
 if __name__ == '__main__':
@@ -224,17 +230,13 @@ if __name__ == '__main__':
 	debugger.load('main')
 	debugger.start()
 
-	for n in range(24):
-		debugger.step_over()
-
-	for name, attr in debugger.locals().items():
-		print(name, attr['type'], attr['value'])
+	debugger.step_over(24)
+	locs = debugger.locals()
 
 	debugger.step_in()
-	debugger.step_over()
-	debugger.step_over()
-	debugger.step_over()
-	debugger.step_over()
-	debugger.step_over()
+	debugger.step_over(6)
+	locs = debugger.locals()
+	print('type: ' + locs['name']['type'])
+	print('value: "{0}"'.format(locs['name']['value']))
 
 

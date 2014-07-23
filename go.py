@@ -187,12 +187,19 @@ class Debugger(object):
 	def step_to_line(self, line):
 		command = 'next'
 
+		# Check for a line above the current line
 		if line < self.line_no:
-			print("bad line")
-			exit()
+			print("Can't step from line {0} to line {1}. Exiting ...".format(self.line_no, line))
+			exit(1)
 
 		while self.line_no < line:
 			self._run_command(command, True, True)
+
+		# Check for stepping over the desired line
+		if self.line_no > line:
+			print("Tried to step to line {0} but ended up on line {1}. Exiting ...".format(line, self.line_no))
+			exit(1)
+
 		print('step_to_line', self.file, self.function, self.line_no)
 
 	def step_forward(self, steps=1):
